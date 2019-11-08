@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 542.0001, y: 71.000015}
+  m_AnchoredPosition: {x: 314, y: 90}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &912824616
@@ -106,10 +106,10 @@ RectTransform:
   m_Father: {fileID: 45225767733437104}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -19.52, y: 208.34995}
-  m_SizeDelta: {x: 11.040003, y: -79.299904}
+  m_AnchorMin: {x: 0.39082125, y: 0.65300006}
+  m_AnchorMax: {x: 0.39082125, y: 0.65300006}
+  m_AnchoredPosition: {x: 8, y: -86}
+  m_SizeDelta: {x: 624, y: 47.45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2092530944
 CanvasRenderer:
@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 45225768727240725}
   - component: {fileID: 45225768727240726}
   m_Layer: 0
-  m_Name: Text
+  m_Name: Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -328,7 +328,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 25
+  m_Text: 10
 --- !u!1 &45225768989764290
 GameObject:
   m_ObjectHideFlags: 0
@@ -465,6 +465,14 @@ MonoBehaviour:
   calculatedtime: 0
   timerimage: {fileID: 912824615}
   cardisplacedbyplayer: 0
+  cancalculate: 0
+  health: 10
+  healthtext: {fileID: 45225768727240726}
+  isvaluechanged: 0
+  isvaluechangedtothisplayer: 0
+  iscalculating: 0
+  nextturn: 0
+  isnothingchanged: 0
 --- !u!114 &-2958888860296051739
 MonoBehaviour:
   m_ObjectHideFlags: 0

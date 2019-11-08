@@ -707,7 +707,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 848105992}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.83, y: -13.01, z: 0}
+  m_LocalPosition: {x: -6.9, y: -14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1940295513}
@@ -1025,7 +1025,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 10
-    m_MaxSize: 92
+    m_MaxSize: 109
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1240,7 +1240,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 16.53
+  orthographic size: 18.21
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1323,8 +1323,8 @@ MonoBehaviour:
   reloadbutton: {fileID: 515177105}
   exitbutton: {fileID: 23950140}
   row: 1
-  coloumns: 4
-  gridsize: {x: 13.5, y: 4.5}
+  coloumns: 3
+  gridsize: {x: 10, y: 4.5}
   gridoffset: {x: 0, y: 0}
   cellobject: {fileID: 5061344931067889175, guid: c838cbf97acf956428b5baf9634fede3,
     type: 3}
@@ -1344,6 +1344,9 @@ MonoBehaviour:
   cardlist: []
   placedcardlist: []
   numberofcard: 0
+  coveredsprite:
+  - {fileID: 21300000, guid: 34fe7b45caf68419b82d287cec0daa15, type: 3}
+  - {fileID: 21300000, guid: e7d9cc2617df5456eb3d3ddad2e451e5, type: 3}
   visualtext: {fileID: 1255556325}
   startbutton: {fileID: 1252995192}
   canplay: 0
@@ -1474,7 +1477,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1897799077}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.78, y: -14.13, z: 0}
+  m_LocalPosition: {x: -1.9, y: -14.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2036730682}

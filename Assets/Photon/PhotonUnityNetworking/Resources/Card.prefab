@@ -207,7 +207,7 @@ Transform:
   m_GameObject: {fileID: 5061344931067889175}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.1, y: -13.9, z: 0}
-  m_LocalScale: {x: 1.1975807, y: 1.1927711, z: 0}
+  m_LocalScale: {x: 1.1827956, y: 1.1927711, z: 0}
   m_Children:
   - {fileID: 5061344931005230852}
   - {fileID: 275691969}
@@ -259,6 +259,7 @@ MonoBehaviour:
   cardvalue: 0
   isplaced: 0
   canshowvalues: 0
+  respawned: 0
 --- !u!61 &6260275282611248452
 BoxCollider2D:
   m_ObjectHideFlags: 0
