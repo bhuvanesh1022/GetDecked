@@ -497,10 +497,10 @@ RectTransform:
   m_Father: {fileID: 1450494971}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -133}
-  m_SizeDelta: {x: 337, y: 266}
+  m_AnchorMin: {x: 0.17684901, y: 0.66742224}
+  m_AnchorMax: {x: 0.8311696, y: 0.95457774}
+  m_AnchoredPosition: {x: -2, y: -1.5}
+  m_SizeDelta: {x: -3, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &99067770
 MonoBehaviour:
@@ -1159,8 +1159,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 176940973}
   m_HandleRect: {fileID: 176940972}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.6031138
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2283,10 +2283,10 @@ RectTransform:
   m_Father: {fileID: 898506905}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -84.765625}
-  m_SizeDelta: {x: 481.25, y: 169.53125}
+  m_AnchorMin: {x: 0.038469274, y: 0.77666754}
+  m_AnchorMax: {x: 0.96923465, y: 0.96316886}
+  m_AnchoredPosition: {x: -2, y: -6}
+  m_SizeDelta: {x: -2.75, y: -2.46875}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &817630078
 MonoBehaviour:
@@ -3063,7 +3063,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -263.9021, y: 290.60165}
+  m_AnchoredPosition: {x: -263.90173, y: 292.7962}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1370486022
@@ -3079,7 +3079,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 46
+    m_Left: 19
     m_Right: 0
     m_Top: 10
     m_Bottom: 210
@@ -3615,7 +3615,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -81, y: 133.00012}
+  m_AnchoredPosition: {x: -81, y: 133.06}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1818531202
@@ -4298,7 +4298,7 @@ PrefabInstance:
     - target: {fileID: 8505342380930216957, guid: a0383b24be196614e8869ce518fbbef2,
         type: 3}
       propertyPath: m_FontData.m_MaxSize
-      value: 40
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8505342380930216957, guid: a0383b24be196614e8869ce518fbbef2,
         type: 3}
@@ -4385,5 +4385,10 @@ PrefabInstance:
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8505342382611092139, guid: a0383b24be196614e8869ce518fbbef2,
+        type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: e48fae5300e184da08f6ecceb09ca84a, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0383b24be196614e8869ce518fbbef2, type: 3}

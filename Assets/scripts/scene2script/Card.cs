@@ -14,11 +14,12 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
     public int cardvalue;
     public bool isplaced;
     public bool canshowvalues;
-
+    public bool respawned;
     private void Start()
     {
+        respawned = true;
         Attributes();
-        Manager.manager.cardcount++;
+       
         startpos = transform.position;
         Localscale();
         Cardnamesync();
@@ -28,6 +29,7 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
     {
         Cardshow();
         Gameplay();
+        Cardcovered();
     }
 
     //card scaled
@@ -44,9 +46,13 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
     {
         if (photonView.IsMine)
         {
+            Manager.manager.cardcount++;
+            cardvalue = Manager.manager.cardcount;
             cardname = Mastermanager._gamesettings.Nickname;
+            this.gameObject.name = cardname + "'s" + "card" + Manager.manager.cardcount;
         }
-        this.gameObject.name = cardname + "'s" + "card" + Manager.manager.cardcount;
+       
+      
     }
 
     [PunRPC]
@@ -139,11 +145,13 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
 
     void Attributes()
     {
-        if (photonView.IsMine)
+        if (photonView.IsMine &&respawned)
         {
-            cardvalue = Random.Range(0, cardattributes.Count);
+           
+           // cardvalue = Random.Range(0, cardattributes.Count);
 
-            cardattributetext.text = cardattributes[cardvalue];
+            cardattributetext.text = cardattributes[Manager.manager.cardcount];
+            respawned = false;
         }
     }
 
@@ -173,7 +181,7 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
         Manager.manager.placedcardlist.Add(this.gameObject);
     }
 
-
+  
     public void Gameplay()
     {
         if(Manager.manager.placedcardlist.Count==2)
@@ -185,6 +193,23 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
         {
             canshowvalues = false;
         }
+       
+    }
+    void Cardcovered()
+    {
+        if (!photonView.IsMine)
+        {
+            if (canshowvalues )
+            {
+                this.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = Manager.manager.coveredsprite[0];
+                this.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 1;
+            }
+            else
+            {
+                this.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = Manager.manager.coveredsprite[1];
+                this.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 3;
+            }
+        }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -192,33 +217,42 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
        if(stream.IsWriting)
         {
             stream.SendNext(iscollided);
-            stream.SendNext(cardname);
+            stream.SendNext(this.gameObject.name);
             stream.SendNext(isplaced);
             stream.SendNext(gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder);
-            if(isplaced)
+            stream.SendNext(cardvalue);
+            stream.SendNext(canshowvalues);
+            stream.SendNext(respawned);
+            if (isplaced)
             {
                 stream.SendNext(transform.position);
             }
-            if(canshowvalues)
+            if(canshowvalues &&iscollided)
             {
-                stream.SendNext(cardvalue);
+               
                 stream.SendNext(cardattributetext.text);
                 stream.SendNext(transform.position);
             }
+           
+           
         }else if(stream.IsReading)
         {
             iscollided = (bool)stream.ReceiveNext();
-            cardname = (string)stream.ReceiveNext();
+           this.gameObject.name = (string)stream.ReceiveNext();
             isplaced = (bool)stream.ReceiveNext();
             gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = (int)stream.ReceiveNext();
-            if(isplaced)
+            cardvalue = (int)stream.ReceiveNext();
+            canshowvalues = (bool)stream.ReceiveNext();
+            respawned = (bool)stream.ReceiveNext();
+            if (isplaced)
             {
                 transform.position = (Vector3)stream.ReceiveNext();
             }
-            if (canshowvalues)
+
+            if (canshowvalues && iscollided)
             {
-                cardvalue = (int)stream.ReceiveNext();
-                cardattributetext.text = (string)stream.ReceiveNext();
+
+                cardattributetext.text =(string)stream.ReceiveNext();
                 transform.position = (Vector3)stream.ReceiveNext();
             }
         }

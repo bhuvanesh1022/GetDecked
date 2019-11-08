@@ -59,7 +59,7 @@ public class Playerlisting : MonoBehaviourPunCallbacks
         else
         {
             readycolor.GetComponent<RawImage>().color = Color.red;
-            readytext.text = "WAIT";
+            readytext.text = "Click to confirm";
            
 
         }
@@ -212,7 +212,7 @@ public class Playerlisting : MonoBehaviourPunCallbacks
         else
         {
             readycolor.GetComponent<RawImage>().color = Color.red;
-            readytext.text = "WAIT";
+            readytext.text = "Wait";
             ready = Isready;
         }
        
@@ -243,10 +243,7 @@ public class Playerlisting : MonoBehaviourPunCallbacks
             {
                 readybuttoninfotext.text = "Waiting For opponent to start the game";
             }
-            else
-            {
-                readybuttoninfotext.text = "Click to confirm";
-            }
+            
         }
     }
     private void Update()

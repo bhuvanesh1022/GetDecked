@@ -11,6 +11,7 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
     private GameObject playerobject;
     public List<Transform> playerposition = new List<Transform>();
     public List<GameObject> playerlist = new List<GameObject>();
+  
    
     private GameObject cam;
 
@@ -43,6 +44,7 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
     public List<GameObject> cardlist = new List<GameObject>();
     public List<GameObject> placedcardlist = new List<GameObject>();
     public int numberofcard;
+    public List<Sprite> coveredsprite = new List<Sprite>();
 
 
     //visual text
@@ -184,10 +186,12 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
     {
         if(stream.IsWriting)
         {
-            stream.SendNext(cardcount);
+         // stream.SendNext(cardcount);
+           
         }else if(stream.IsReading)
         {
-            cardcount = (int)stream.ReceiveNext();
+           //cardcount = (int)stream.ReceiveNext();
+          
         }
     }
 }
