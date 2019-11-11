@@ -24,6 +24,7 @@ public class Playerlisting : MonoBehaviourPunCallbacks
     public GameObject startbutton;
     public GameObject leaveroombutton;
     public Text readybuttoninfotext;
+    public GameObject readybutton;
     public void Firstinitialize(Roomcanvases canvases)
     {
         roomcanvases = canvases;
@@ -32,13 +33,14 @@ public class Playerlisting : MonoBehaviourPunCallbacks
     {
         if(!PhotonNetwork.IsMasterClient)
         {
-            startbutton.GetComponent<Button>().interactable = false;
+            startbutton.SetActive(false);
             leaveroombutton.GetComponent<Button>().interactable = false;
            // readybuttoninfotext.text = "Click to Confirm";
         }
         else
         {
-          //  readybuttoninfotext.text ="Waiting for opponent to confirm";
+            //  readybuttoninfotext.text ="Waiting for opponent to confirm";
+            readybutton.SetActive(false);
         }
        
         GetCurrentroomplayers();
@@ -230,10 +232,12 @@ public class Playerlisting : MonoBehaviourPunCallbacks
         {
             if (Isready)
             {
+                readybutton.SetActive(true);
                 readybuttoninfotext.text = "Click Start to Play";
             }
             else
             {
+                readybutton.SetActive(false);
                 readybuttoninfotext.text = "Waiting for opponent to confirm";
             }
         }

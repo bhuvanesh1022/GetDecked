@@ -473,6 +473,9 @@ MonoBehaviour:
   iscalculating: 0
   nextturn: 0
   isnothingchanged: 0
+  isnotchanged: 0
+  isgameended: 0
+  isvisualgameended: 0
 --- !u!114 &-2958888860296051739
 MonoBehaviour:
   m_ObjectHideFlags: 0

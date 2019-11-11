@@ -3063,7 +3063,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -263.90173, y: 292.7962}
+  m_AnchoredPosition: {x: -263.9033, y: 292.7976}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1370486022
@@ -3190,7 +3190,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 8505342381389838238}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1757326457}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -3421,6 +3421,7 @@ MonoBehaviour:
   startbutton: {fileID: 565458623}
   leaveroombutton: {fileID: 653797556}
   readybuttoninfotext: {fileID: 575469903}
+  readybutton: {fileID: 1757326457}
 --- !u!114 &1608293145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3443,6 +3444,12 @@ MonoBehaviour:
   viewIdField: 3
   InstantiationId: 3
   isRuntimeInstantiated: 0
+--- !u!1 &1757326457 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8505342382611092140, guid: a0383b24be196614e8869ce518fbbef2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8505342381389838238}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1767144157
 GameObject:
   m_ObjectHideFlags: 0
