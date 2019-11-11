@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
-public class Card : MonoBehaviourPunCallbacks,IPunObservable
+public class Card : MonoBehaviourPunCallbacks, IPunObservable
 {
 
     public Vector2 startpos;
@@ -18,24 +18,27 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
     private void Start()
     {
         respawned = true;
+        Cardnamesync();
         Attributes();
-       
+
         startpos = transform.position;
         Localscale();
-        Cardnamesync();
+
         photonView.RPC("Addcard", RpcTarget.AllBuffered, null);
     }
     private void Update()
     {
-        Cardshow();
         Gameplay();
+        Cardshow();
+      
         Cardcovered();
+
     }
 
     //card scaled
     public void Localscale()
     {
-        if(!photonView.IsMine)
+        if (!photonView.IsMine)
         {
             transform.localScale = new Vector3(0f, 0f, 0f);
         }
@@ -49,10 +52,10 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
             Manager.manager.cardcount++;
             cardvalue = Manager.manager.cardcount;
             cardname = Mastermanager._gamesettings.Nickname;
-            this.gameObject.name = cardname + "'s" + "card" + Manager.manager.cardcount;
+            this.gameObject.name = cardname + "'s" + "card" + cardvalue;
         }
-       
-      
+
+
     }
 
     [PunRPC]
@@ -74,7 +77,7 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
         {
             Manager.manager = FindObjectOfType<Manager>();
         }
-        if (photonView.IsMine &&Manager.manager.canplay)
+        if (photonView.IsMine && Manager.manager.canplay)
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             transform.position = pos;
@@ -87,7 +90,7 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
         {
             Manager.manager = FindObjectOfType<Manager>();
         }
-        if (photonView.IsMine &&Manager.manager.canplay)
+        if (photonView.IsMine && Manager.manager.canplay)
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             transform.position = pos;
@@ -96,7 +99,7 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
     }
     private void OnMouseUp()
     {
-        if(Manager.manager==null)
+        if (Manager.manager == null)
         {
             Manager.manager = FindObjectOfType<Manager>();
         }
@@ -111,12 +114,12 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
             photonView.RPC("Addplacedcard", RpcTarget.AllBuffered, null);
 
         }
-       
+
     }
 
 
 
-    
+
 
     //triggering it
     private void OnTriggerEnter2D(Collider2D collision)
@@ -129,7 +132,7 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.gameObject.tag=="Table")
+        if (collision.gameObject.tag == "Table")
         {
             iscollided = true;
         }
@@ -138,19 +141,19 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
     {
         if (collision.gameObject.tag == "Table")
         {
-            iscollided =false;
+            iscollided = false;
         }
     }
 
 
     void Attributes()
     {
-        if (photonView.IsMine &&respawned)
+        if (photonView.IsMine && respawned)
         {
-           
-           // cardvalue = Random.Range(0, cardattributes.Count);
 
-            cardattributetext.text = cardattributes[Manager.manager.cardcount];
+            // cardvalue = Random.Range(0, cardattributes.Count);
+
+            cardattributetext.text = cardattributes[cardvalue - 1];
             respawned = false;
         }
     }
@@ -163,11 +166,11 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
         {
             Manager.manager = FindObjectOfType<Manager>();
         }
-        if (isplaced &&!photonView.IsMine)
+        if (isplaced && !photonView.IsMine)
         {
             transform.localScale = Manager.manager.cellscale;
         }
-        else if(!isplaced && !photonView.IsMine)
+        else if (!isplaced && !photonView.IsMine)
         {
             transform.localScale = new Vector3(0f, 0f, 0f);
         }
@@ -181,25 +184,22 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
         Manager.manager.placedcardlist.Add(this.gameObject);
     }
 
-  
+
+
     public void Gameplay()
     {
-        if(Manager.manager.placedcardlist.Count==2)
+        if (Manager.manager.placedcardlist.Count == 2)
         {
             canshowvalues = true;
 
         }
-        else
-        {
-            canshowvalues = false;
-        }
-       
+
     }
     void Cardcovered()
     {
         if (!photonView.IsMine)
         {
-            if (canshowvalues )
+            if (canshowvalues)
             {
                 this.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = Manager.manager.coveredsprite[0];
                 this.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 1;
@@ -214,7 +214,7 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-       if(stream.IsWriting)
+        if (stream.IsWriting)
         {
             stream.SendNext(iscollided);
             stream.SendNext(this.gameObject.name);
@@ -227,18 +227,19 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
             {
                 stream.SendNext(transform.position);
             }
-            if(canshowvalues &&iscollided)
+            if (canshowvalues && iscollided)
             {
-               
+
                 stream.SendNext(cardattributetext.text);
                 stream.SendNext(transform.position);
             }
-           
-           
-        }else if(stream.IsReading)
+
+
+        }
+        else if (stream.IsReading)
         {
             iscollided = (bool)stream.ReceiveNext();
-           this.gameObject.name = (string)stream.ReceiveNext();
+            this.gameObject.name = (string)stream.ReceiveNext();
             isplaced = (bool)stream.ReceiveNext();
             gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = (int)stream.ReceiveNext();
             cardvalue = (int)stream.ReceiveNext();
@@ -252,7 +253,7 @@ public class Card : MonoBehaviourPunCallbacks,IPunObservable
             if (canshowvalues && iscollided)
             {
 
-                cardattributetext.text =(string)stream.ReceiveNext();
+                cardattributetext.text = (string)stream.ReceiveNext();
                 transform.position = (Vector3)stream.ReceiveNext();
             }
         }
