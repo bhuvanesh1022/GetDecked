@@ -60,8 +60,16 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
     public int wagevalue;
     public int maxwagevalue;
     public Text wagevaluetext;
+    public Text chiptext;
     public GameObject wagebetbutton;
     public bool iswagebetted;
+    public Text opponentchiplefttext;
+
+
+
+
+    public GameObject opponentbettedtext;
+    public Text bettedtext;
     private void Start()
     {
         Spawn();
