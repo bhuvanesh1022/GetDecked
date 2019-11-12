@@ -77,7 +77,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
         {
             Manager.manager = FindObjectOfType<Manager>();
         }
-        if (photonView.IsMine && Manager.manager.canplay)
+        if (photonView.IsMine && Manager.manager.canplay&&Manager.manager.iswagebetted)
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             transform.position = pos;
@@ -90,7 +90,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
         {
             Manager.manager = FindObjectOfType<Manager>();
         }
-        if (photonView.IsMine && Manager.manager.canplay)
+        if (photonView.IsMine && Manager.manager.canplay && Manager.manager.iswagebetted)
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             transform.position = pos;

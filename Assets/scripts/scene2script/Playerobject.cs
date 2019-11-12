@@ -13,7 +13,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
     public float currenttime;
     public float maxtime;
     public float calculatedtime;
-    public Image timerimage;
+   
     public bool cardisplacedbyplayer;
     public bool cancalculate;
     public int health;
@@ -26,6 +26,17 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
     public bool isnotchanged;
     public bool isgameended;
     public bool isvisualgameended;
+
+    public int wagevalue;
+    public int wagetobet;
+    public bool iswagebetted;
+    public int opponentbetted;
+    public bool iswagevisualbet;
+    public int maxwage;
+
+    //wage
+  
+  
     private void Start()
     {
     
@@ -35,6 +46,9 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
         Playerdetails();
         photonView.RPC("Addplayers", RpcTarget.AllBuffered, null);
         Manager.manager.startbutton.GetComponent<Button>().onClick.AddListener(Onclickstartbutton);
+        Manager.manager.increamentbutton.onClick.AddListener(Onclickplus);
+        Manager.manager.decreamentbutton.onClick.AddListener(Onclickminus);
+        Manager.manager.wagebetbutton.GetComponent<Button>().onClick.AddListener(Onclickwagebetbutton);
         Waitforopponent();
     }
     public void Waitforopponent()
@@ -52,17 +66,108 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Update()
     {
+        Wagevisual();
+        Opponentbetted();
         Visualinformation();
         Visualtext();
         StartCoroutine("Wait");
         Timer();
         Iscardplacedbyplayer();
         Health();
-
         Healthvisual();
         Wincondition();
+        //Tokenreset();
+
+
+    }
+    public void Wagevisual()
+    {
+        if (Manager.manager == null)
+        {
+            Manager.manager = GameObject.Find("Manager").GetComponent<Manager>();
+        }
+      
+        
+
+            if (Manager.manager.canplay && !Manager.manager.iswagebetted&&photonView.IsMine)
+            {
+               iswagevisualbet = true;
+
+
+            }
+            else if (Manager.manager.canplay && Manager.manager.iswagebetted &&photonView.IsMine)
+            {
+               iswagevisualbet = false;
+            }
+            if (iswagevisualbet &&photonView.IsMine)
+            {
+               isvisualenabled = true;
+                Manager.manager.visualtext.GetComponent<Text>().text = "Bet To Place the card";
+
+        }
+       
+       
+           
+        
+
+       
+    }
+    public void Onclickplus()
+    {
+        if (photonView.IsMine &&Manager.manager.canplay&& !Manager.manager.iswagebetted)
+        {
+            if (Manager.manager.wagevalue < Manager.manager.maxwagevalue)
+            {
+                Manager.manager.wagevalue++;
+                wagevalue = Manager.manager.wagevalue;
+                Manager.manager.wagevaluetext.text = wagevalue.ToString();
+            }
+        }
     }
 
+
+
+
+    public void Onclickminus()
+    {
+        if (photonView.IsMine && Manager.manager.canplay && !Manager.manager.iswagebetted)
+        {
+            if (Manager.manager.wagevalue > 0)
+            {
+                Manager.manager.wagevalue--;
+                wagevalue = Manager.manager.wagevalue;
+                Manager.manager.wagevaluetext.text = wagevalue.ToString();
+            }
+        }
+    }
+
+
+
+
+    public void Onclickwagebetbutton()
+    {
+        isvisualenabled = false;
+        if ( Manager.manager.canplay &&! Manager.manager.iswagebetted )
+        {
+           
+            Manager.manager.iswagebetted = true;
+            iswagebetted = true;
+
+            
+            wagetobet = wagevalue;
+
+            Manager.manager.maxwagevalue = Manager.manager.maxwagevalue - Manager.manager.wagevalue;
+            maxwage = Manager.manager.maxwagevalue;
+            Debug.Log(Manager.manager.maxwagevalue + "maxwage");
+            Manager.manager.wagevalue = Manager.manager.maxwagevalue;
+            Debug.Log(Manager.manager.wagevalue + "managerwage");
+            wagevalue = Manager.manager.maxwagevalue;
+            Debug.Log(wagevalue + "wage");
+            Manager.manager.wagevaluetext.text = wagevalue.ToString();
+            
+           
+        }
+    }
 
     //positioning player
     void Playerposition()
@@ -93,13 +198,19 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             this.gameObject.name = Mastermanager._gamesettings.Nickname;
             playerindex = Mastermanager._gamesettings.playerenteredindex;
             usernametext.text = "YOU";
-            currenttime = maxtime;
+            currenttime = 0;
+            Manager.manager.timerimage.SetActive(true);
+            Manager.manager.wageobject.SetActive(true);
+            Manager.manager.wagebetbutton.SetActive(true);
+            wagevalue =Manager.manager.maxwagevalue;
         }
         else
         {
             username = photonView.Owner.NickName;
             this.gameObject.name = photonView.Owner.NickName;
             usernametext.text = this.gameObject.name;
+          
+
         }
     }
 
@@ -191,9 +302,12 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             isvisualenabled = true;
             yield return new WaitForSeconds(1.5f);
             Gamestarted = false;
-            isvisualenabled = false;
+           // isvisualenabled = false;
             Manager.manager.canplay = true;
         }
+      
+      
+
         if (Manager.manager.placedcardlist.Count == 2)
         {
 
@@ -261,6 +375,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
       
         if (nextturn)
         {
+          
+            iswagebetted = false;
             for (int c = 0; c < Manager.manager.cardlist.Count; c++)
             {
                 Manager.manager.cardlist[c].GetComponent<Card>().canshowvalues = false;
@@ -269,10 +385,11 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             yield return new WaitForSeconds(2f);
             Manager.manager.canplay = true;
             nextturn = false;
+            Manager.manager.iswagebetted = false;
             for (int j = 0; j < Manager.manager.playerlist.Count; j++)
             {
                 Manager.manager.playerlist[j].GetComponent<Playerobject>().cardisplacedbyplayer = false;
-                Manager.manager.playerlist[j].GetComponent<Playerobject>().isvisualenabled = false;
+             
             }
 
 
@@ -290,7 +407,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             isvisualenabled = true;
             yield return new WaitForSeconds(2f);
            // isvisualgameended = false;
-            isvisualenabled = false;
+           
         }
 
     }
@@ -301,23 +418,24 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (Manager.manager.canplay && !cardisplacedbyplayer)
             {
-                currenttime -= Time.deltaTime;
+                currenttime += Time.deltaTime;
                 calculatedtime = currenttime / maxtime;
-                timerimage.fillAmount = calculatedtime;
+               
+               Manager.manager.timerimage.GetComponent<Slider>().value = calculatedtime;
             }
-            if (currenttime < 0 || cardisplacedbyplayer)
+            if (currenttime > maxtime || cardisplacedbyplayer)
             {
                 Manager.manager.canplay = false;
                 cardisplacedbyplayer = true;
-                currenttime = maxtime;
-                calculatedtime = 1;
-                timerimage.fillAmount = calculatedtime;
+                currenttime = 0;
+                calculatedtime = 0;
+                Manager.manager.timerimage.GetComponent<Slider>().value = calculatedtime;
             }
         }
     }
 
 
-
+    
 
     void Iscardplacedbyplayer()
     {
@@ -341,9 +459,30 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
 
 
 
+    public void Opponentbetted()
+    {
+
+
+        for (int i = 0; i < Manager.manager.playerlist.Count; i++)
+        {
+            if (!Manager.manager.playerlist[i].GetComponent<Playerobject>().photonView.IsMine)
+            {
+                if (Manager.manager.playerlist[i].GetComponent<Playerobject>().iswagebetted)
+                {
+                    if (photonView.IsMine)
+                    {
+                        opponentbetted = Manager.manager.playerlist[i].GetComponent<Playerobject>().wagetobet;
+                    }
+                }
+            }
+        }
 
 
 
+
+
+       
+    }
     public void Health()
     {
         if (Manager.manager == null)
@@ -369,7 +508,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             if (!Manager.manager.placedcardlist[i].GetComponent<Card>().photonView.IsMine && Manager.manager.playerlist[a].GetComponent<Playerobject>().photonView.IsMine)
                             {
                                 Debug.Log(Manager.manager.playerlist[a].GetComponent<Playerobject>().username + "reduces");
-                                Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= 1;
+                                Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= Manager.manager.playerlist[a].GetComponent<Playerobject>().opponentbetted+ 1;
                               //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
 
                                 Manager.manager.playerlist[a].GetComponent<Playerobject>().isvaluechangedtothisplayer = true;
@@ -386,8 +525,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             if (!Manager.manager.placedcardlist[j].GetComponent<Card>().photonView.IsMine && Manager.manager.playerlist[a].GetComponent<Playerobject>().photonView.IsMine)
                             {
                                 Debug.Log(Manager.manager.playerlist[a].GetComponent<Playerobject>().username + "reduces");
-                                Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= 1;
-                             //   Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
+                                Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= Manager.manager.playerlist[a].GetComponent<Playerobject>().opponentbetted + 1;
+                                //   Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
                                 Manager.manager.visualtext.GetComponent<Text>().fontSize = 57;
 
                                 Manager.manager.playerlist[a].GetComponent<Playerobject>().isvaluechangedtothisplayer = true;
@@ -402,8 +541,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             if (!Manager.manager.placedcardlist[j].GetComponent<Card>().photonView.IsMine && Manager.manager.playerlist[a].GetComponent<Playerobject>().photonView.IsMine)
                             {
                                 Debug.Log(Manager.manager.playerlist[a].GetComponent<Playerobject>().username + "reduces");
-                                Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= 1;
-                              //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
+                                Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= Manager.manager.playerlist[a].GetComponent<Playerobject>().opponentbetted + 1;
+                                //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
                                 Manager.manager.visualtext.GetComponent<Text>().fontSize = 57;
 
                                 Manager.manager.playerlist[a].GetComponent<Playerobject>().isvaluechangedtothisplayer = true;
@@ -418,8 +557,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             if (!Manager.manager.placedcardlist[i].GetComponent<Card>().photonView.IsMine && Manager.manager.playerlist[a].GetComponent<Playerobject>().photonView.IsMine)
                             {
                                 Debug.Log(Manager.manager.playerlist[a].GetComponent<Playerobject>().username + "reduces");
-                                Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= 1;
-                            //    Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
+                                Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= Manager.manager.playerlist[a].GetComponent<Playerobject>().opponentbetted + 1;
+                                //    Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
                                 Manager.manager.visualtext.GetComponent<Text>().fontSize = 57;
 
                                 Manager.manager.playerlist[a].GetComponent<Playerobject>().isvaluechangedtothisplayer = true;
@@ -434,9 +573,9 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             if (!Manager.manager.placedcardlist[j].GetComponent<Card>().photonView.IsMine && Manager.manager.playerlist[a].GetComponent<Playerobject>().photonView.IsMine)
                             {
                                 Debug.Log(Manager.manager.playerlist[a].GetComponent<Playerobject>().username + "reduces");
-                                Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= 1;
+                                Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= Manager.manager.playerlist[a].GetComponent<Playerobject>().opponentbetted + 1;
 
-                              //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
+                                //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
                                 Manager.manager.visualtext.GetComponent<Text>().fontSize = 57;
 
                                 Manager.manager.playerlist[a].GetComponent<Playerobject>().isvaluechangedtothisplayer = true;
@@ -452,9 +591,9 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             if (!Manager.manager.placedcardlist[i].GetComponent<Card>().photonView.IsMine && Manager.manager.playerlist[a].GetComponent<Playerobject>().photonView.IsMine)
                             {
                                 Debug.Log(Manager.manager.playerlist[a].GetComponent<Playerobject>().username + "reduces");
-                                Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= 1;
+                                Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= Manager.manager.playerlist[a].GetComponent<Playerobject>().opponentbetted + 1;
 
-                              //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
+                                //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
                                 Manager.manager.visualtext.GetComponent<Text>().fontSize = 57;
                                 Manager.manager.playerlist[a].GetComponent<Playerobject>().isvaluechangedtothisplayer = true;
 
@@ -488,7 +627,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-
+   
     public void Healthvisual()
     {
         if (cancalculate)
@@ -513,8 +652,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
 
                 }
                 if (Manager.manager.playerlist[i].GetComponent<Playerobject>().isnotchanged && !Manager.manager.playerlist[i].GetComponent<Playerobject>().cancalculate&&photonView.IsMine)
-            {
-               
+                {
                 Manager.manager.visualtext.GetComponent<Text>().text = " Same Cards";
                 }
 
@@ -524,7 +662,9 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
         if (nextturn)
         {
             Manager.manager.visualtext.GetComponent<Text>().text = "Next turn";
-
+            iswagebetted = false;
+           
+            Manager.manager.canplay = true;
             for (int c = 0; c < Manager.manager.cardlist.Count; c++)
             {
                 if (Manager.manager.cardlist[c].GetComponent<Card>().isplaced)
@@ -533,12 +673,14 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                     Manager.manager.cardlist[c].transform.position = Manager.manager.cardlist[c].GetComponent<Card>().startpos;
                     Manager.manager.cardlist[c].GetComponent<Card>().isplaced = false;
                     Manager.manager.cardlist[c].GetComponent<Card>().canshowvalues = false;
+                   
                 }
 
             }
+          
         }
 
-
+       
         if (isvisualgameended)
         {
             for (int i = 0; i < Manager.manager.playerlist.Count; i++)
@@ -574,6 +716,26 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             }
         }
     }
+
+    void Tokenreset()
+    {
+        for (int i = 0; i < Manager.manager.playerlist.Count; i++)
+        {
+            for (int j = i + 1; j < Manager.manager.playerlist.Count; j++)
+            {
+                if (Manager.manager.playerlist[i].GetComponent<Playerobject>().wagevalue == 0 && Manager.manager.playerlist[j].GetComponent<Playerobject>().wagevalue == 0)
+                {
+                    Manager.manager.wagevalue = 10;
+                    Manager.manager.maxwagevalue = Manager.manager.wagevalue;
+                    Debug.Log("Iszero");
+                    Manager.manager.playerlist[i].GetComponent<Playerobject>().wagevalue = Manager.manager.wagevalue;
+                    Manager.manager.playerlist[i].GetComponent<Playerobject>(). maxwage = Manager.manager.maxwagevalue;
+                    Manager.manager.playerlist[j].GetComponent<Playerobject>().wagevalue = Manager.manager.wagevalue;
+                    Manager.manager.playerlist[j].GetComponent<Playerobject>().maxwage = Manager.manager.maxwagevalue;
+                }
+            }
+        }
+    }
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -588,6 +750,12 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(isnothingchanged);
             stream.SendNext(isnotchanged);
             stream.SendNext(isgameended);
+            stream.SendNext(iswagebetted);
+            stream.SendNext(wagetobet);
+            stream.SendNext(wagevalue);
+            stream.SendNext(opponentbetted);
+            stream.SendNext(iswagevisualbet);
+            
         }
         else if (stream.IsReading)
         {
@@ -601,7 +769,12 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             isnothingchanged = (bool)stream.ReceiveNext();
             isnotchanged = (bool)stream.ReceiveNext();
             isgameended = (bool)stream.ReceiveNext();
-
+            iswagebetted = (bool)stream.ReceiveNext();
+            wagetobet = (int)stream.ReceiveNext();
+            wagevalue = (int)stream.ReceiveNext();
+            opponentbetted = (int)stream.ReceiveNext();
+            iswagevisualbet = (bool)stream.ReceiveNext();
+         
         }
     }
 }
