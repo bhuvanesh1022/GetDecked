@@ -51,9 +51,17 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
     public GameObject visualtext;
     public GameObject startbutton;
     public bool canplay;
+    //player timer
+    public GameObject timerimage;
 
-
-
+    public GameObject wageobject;
+    public Button increamentbutton;
+    public Button decreamentbutton;
+    public int wagevalue;
+    public int maxwagevalue;
+    public Text wagevaluetext;
+    public GameObject wagebetbutton;
+    public bool iswagebetted;
     private void Start()
     {
         Spawn();
@@ -61,6 +69,7 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
         Cardspawn();
         reloadbutton.GetComponent<Button>().onClick.AddListener(Onclickreloadscene);
         exitbutton.GetComponent<Button>().onClick.AddListener(Onclickexit);
+       
     }
 
 
@@ -153,12 +162,7 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
 
 
 
-
-
-
-
-
-
+   
 
 
 
@@ -181,6 +185,8 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
     {
         Application.Quit();
     }
+
+
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
