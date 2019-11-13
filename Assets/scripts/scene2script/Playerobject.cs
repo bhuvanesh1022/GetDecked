@@ -92,7 +92,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
       
         
 
-            if (Manager.manager.canplay && !Manager.manager.iswagebetted&&photonView.IsMine)
+            if (Manager.manager.canplay && !Manager.manager.iswagebetted && photonView.IsMine)
             {
                iswagevisualbet = true;
             Manager.manager.opponentbettedtext.SetActive(false);

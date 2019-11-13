@@ -28,7 +28,7 @@ public class Roomlist : MonoBehaviourPunCallbacks
     public void SetRoominfo(RoomInfo roominfo)
 {
     rominfo = roominfo;
-        _text.text = roominfo.MaxPlayers + "  " + roominfo.Name;
+        _text.text = roominfo.Name;
     }
     public void Onclickutton()
     {
