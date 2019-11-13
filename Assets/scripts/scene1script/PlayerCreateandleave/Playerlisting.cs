@@ -6,8 +6,7 @@ using Photon.Realtime;
 using UnityEngine.UI;
 
 public class Playerlisting : MonoBehaviourPunCallbacks
-{
-
+{   
     [SerializeField]
     private Transform content;
     [SerializeField]
