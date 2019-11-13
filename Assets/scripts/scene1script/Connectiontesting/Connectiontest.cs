@@ -68,9 +68,6 @@ public class Connectiontest : MonoBehaviourPunCallbacks
             PhotonNetwork.JoinLobby();
             createbutton.interactable = true;
         }
-      
-      
-
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -80,7 +77,7 @@ public class Connectiontest : MonoBehaviourPunCallbacks
             Userscript.userscript = FindObjectOfType<Userscript>();
         }
         infotext.text = "Disconnected retry";
-        Userscript.userscript.usercanvas.sortingOrder = 3;
+        Userscript.userscript.userNamePanel.SetActive(true);
         print("Disconnected due to " + cause.ToString());
        
     }

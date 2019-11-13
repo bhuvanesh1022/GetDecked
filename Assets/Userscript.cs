@@ -9,26 +9,40 @@ public class Userscript : MonoBehaviour,IPunObservable
 
     public InputField userinput;
     public string user;
-    public Canvas usercanvas;
+    public Button userNameInput;
+    public GameObject userNamePanel;
+    public GameObject RoomListingPanel;
+    
     void Start()
     {
         if (PhotonNetwork.CurrentRoom != null)
         {
             PhotonNetwork.LeaveRoom();
         }
-            usercanvas.sortingOrder = 3;
-            FindObjectOfType<Audiomanager>().Play(0);
-
-        
-
-
+        FindObjectOfType<Audiomanager>().Play(0);
     }
-   public void Onclickuserbutton()
+
+    public void Update()
     {
-       user = userinput.text;
+        if (userinput.text.Length < 2)
+        {
+            userNameInput.interactable = false;
+            userNameInput.GetComponentInChildren<Text>().enabled = false;
+        }
+        else
+        {
+            userNameInput.interactable = true;
+            userNameInput.GetComponentInChildren<Text>().enabled = true;
+        }
+    }
+
+    public void Onclickuserbutton()
+    {
+        user = userinput.text;
         Mastermanager._gamesettings.Nickname = user;
         PhotonNetwork.LocalPlayer.NickName = Mastermanager._gamesettings.Nickname;
-        usercanvas.sortingOrder = 1;
+        userNamePanel.SetActive(false);
+        RoomListingPanel.SetActive(true);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -40,10 +54,5 @@ public class Userscript : MonoBehaviour,IPunObservable
         {
             user= (string)stream.ReceiveNext();
         }
-    }
-    void Update()
-    {
-     
-            
     }
 }

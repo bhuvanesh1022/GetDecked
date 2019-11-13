@@ -6,15 +6,14 @@ using Photon.Realtime;
 using UnityEngine.UI;
 
 public class Playerlisting : MonoBehaviourPunCallbacks
-{
-
+{   
     [SerializeField]
     private Transform content;
     [SerializeField]
     private PlayerList player;
     public List<PlayerList> playerlist = new List<PlayerList>();
     public float f;
-  
+    
     private Roomcanvases roomcanvases;
     [SerializeField]
     private Text readytext;
@@ -51,29 +50,21 @@ public class Playerlisting : MonoBehaviourPunCallbacks
     {
         ready = state;
         if(ready)
-        {
-          
+        { 
             readytext.text = "READY";
             readycolor.GetComponent<RawImage>().color = Color.green;
-           
-          
         }
         else
         {
             readycolor.GetComponent<RawImage>().color = Color.red;
             readytext.text = "Click to confirm";
-           
-
         }
     }
-   
-   
-   
+
     public override void OnEnable()
     {
         base.OnEnable();
         SetReadytext(false);
-       
     }
 
     public override void OnDisable()
@@ -113,20 +104,16 @@ public class Playerlisting : MonoBehaviourPunCallbacks
        
         int index = playerlist.FindIndex(x => x.playersobj == playersname);
         if (index != -1)
-        {
-           
+        {  
             playerlist[index].SetPlayerinfo(playersname);
             Debug.Log(index + "ind1");
         }
         else
-        {
-           
+        {  
             PlayerList listing = Instantiate(player, content);
 
             if (listing != null)
-            {
-               
-               
+            {  
                 playerlist.Add(listing);
               
                 listing.SetPlayerinfo(playersname);
@@ -142,13 +129,9 @@ public class Playerlisting : MonoBehaviourPunCallbacks
 
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-       
+    {  
         AddPlayerList(newPlayer);
     }
-
-
- 
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -164,17 +147,12 @@ public class Playerlisting : MonoBehaviourPunCallbacks
    
     public void OnclickStartgame()
     {
-        
-    
             for (int i = 0; i < playerlist.Count; i++)
             {
                 if (playerlist[i].playersobj != PhotonNetwork.LocalPlayer)
                 {
                     if (!playerlist[i].Ready)
                         return;
-               
-                  
-                
             }
 
             Mastermanager._gamesettings.Loaded = false;
@@ -183,11 +161,8 @@ public class Playerlisting : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;
         Mastermanager._gamesettings.Loaded = true;
-        
-   
-       
-
     }
+
     public void Onclickreadybutton()
     {
         if(!PhotonNetwork.IsMasterClient)
@@ -195,9 +170,8 @@ public class Playerlisting : MonoBehaviourPunCallbacks
             SetReadytext(!ready);
             base.photonView.RPC("Changereadyfunction", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer, ready);
         }
-        
-       
     }
+
     [PunRPC]
     void Changereadyfunction(Player player,bool Isready)
     {
@@ -217,8 +191,6 @@ public class Playerlisting : MonoBehaviourPunCallbacks
             readytext.text = "Wait";
             ready = Isready;
         }
-       
-
     }
 
  public void Readytextinfo(Player player, bool Isready)
@@ -250,6 +222,7 @@ public class Playerlisting : MonoBehaviourPunCallbacks
             
         }
     }
+
     private void Update()
     {
         Readytextinfo(PhotonNetwork.LocalPlayer, ready);
