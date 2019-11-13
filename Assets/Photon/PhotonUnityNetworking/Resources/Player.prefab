@@ -329,6 +329,7 @@ MonoBehaviour:
   opponentbetted: 0
   iswagevisualbet: 0
   maxwage: 0
+  opponentwage: 0
 --- !u!114 &-2958888860296051739
 MonoBehaviour:
   m_ObjectHideFlags: 0

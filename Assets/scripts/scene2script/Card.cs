@@ -15,6 +15,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
     public bool isplaced;
     public bool canshowvalues;
     public bool respawned;
+   
     private void Start()
     {
         respawned = true;
@@ -30,7 +31,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
     {
         Gameplay();
         Cardshow();
-      
+       
         Cardcovered();
 
     }
@@ -114,10 +115,11 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
             photonView.RPC("Addplacedcard", RpcTarget.AllBuffered, null);
 
         }
+       
 
     }
 
-
+   
 
 
 
@@ -223,6 +225,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(cardvalue);
             stream.SendNext(canshowvalues);
             stream.SendNext(respawned);
+           
             if (isplaced)
             {
                 stream.SendNext(transform.position);
@@ -245,6 +248,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
             cardvalue = (int)stream.ReceiveNext();
             canshowvalues = (bool)stream.ReceiveNext();
             respawned = (bool)stream.ReceiveNext();
+        
             if (isplaced)
             {
                 transform.position = (Vector3)stream.ReceiveNext();
