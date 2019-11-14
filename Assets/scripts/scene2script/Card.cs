@@ -15,7 +15,9 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
     public bool isplaced;
     public bool canshowvalues;
     public bool respawned;
-   
+    public int whichplayer;
+    public GameObject opponentbettetdobject;
+    public Text Opponentbettedtext;
     private void Start()
     {
         respawned = true;
@@ -31,7 +33,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
     {
         Gameplay();
         Cardshow();
-       
+
         Cardcovered();
 
     }
@@ -50,6 +52,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (photonView.IsMine)
         {
+            whichplayer = Mastermanager._gamesettings.playerenteredindex;
             Manager.manager.cardcount++;
             cardvalue = Manager.manager.cardcount;
             cardname = Mastermanager._gamesettings.Nickname;
@@ -78,7 +81,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
         {
             Manager.manager = FindObjectOfType<Manager>();
         }
-        if (photonView.IsMine && Manager.manager.canplay&&Manager.manager.iswagebetted)
+        if (photonView.IsMine && Manager.manager.canplay && Manager.manager.iswagebetted)
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             transform.position = pos;
@@ -115,11 +118,11 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
             photonView.RPC("Addplacedcard", RpcTarget.AllBuffered, null);
 
         }
-       
+
 
     }
 
-   
+
 
 
 
@@ -218,6 +221,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (stream.IsWriting)
         {
+            stream.SendNext(whichplayer);
             stream.SendNext(iscollided);
             stream.SendNext(this.gameObject.name);
             stream.SendNext(isplaced);
@@ -225,7 +229,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(cardvalue);
             stream.SendNext(canshowvalues);
             stream.SendNext(respawned);
-           
+
             if (isplaced)
             {
                 stream.SendNext(transform.position);
@@ -241,6 +245,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
         }
         else if (stream.IsReading)
         {
+            whichplayer = (int)stream.ReceiveNext();
             iscollided = (bool)stream.ReceiveNext();
             this.gameObject.name = (string)stream.ReceiveNext();
             isplaced = (bool)stream.ReceiveNext();
@@ -248,7 +253,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
             cardvalue = (int)stream.ReceiveNext();
             canshowvalues = (bool)stream.ReceiveNext();
             respawned = (bool)stream.ReceiveNext();
-        
+
             if (isplaced)
             {
                 transform.position = (Vector3)stream.ReceiveNext();

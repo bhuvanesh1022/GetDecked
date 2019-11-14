@@ -72,7 +72,7 @@ public class Createroom : MonoBehaviourPunCallbacks
     {
         Debug.Log("Joined " + Roomname.text);
 
-        RoomListingPanel.SetActive(false);
+        RoomListingPanel.transform.localScale=new Vector3(0f,0f,0f);
         CurrentRoomPanel.SetActive(true);
 
         //if (PhotonNetwork.IsMasterClient)
