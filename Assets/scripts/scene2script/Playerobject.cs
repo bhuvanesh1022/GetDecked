@@ -256,7 +256,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             Manager.manager.timerimage.SetActive(true);
             Manager.manager.wageobject.SetActive(true);
             Manager.manager.wagebetbutton.SetActive(true);
-            wagevalue = Manager.manager.maxwagevalue;
+            wagevalue =0;
         }
         else
         {
