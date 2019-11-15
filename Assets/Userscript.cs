@@ -15,6 +15,7 @@ public class Userscript : MonoBehaviour,IPunObservable
     
     void Start()
     {
+        RoomListingPanel.transform.localScale = new Vector3(0f, 0f, 0f);
         if (PhotonNetwork.CurrentRoom != null)
         {
             PhotonNetwork.LeaveRoom();
@@ -42,7 +43,7 @@ public class Userscript : MonoBehaviour,IPunObservable
         Mastermanager._gamesettings.Nickname = user;
         PhotonNetwork.LocalPlayer.NickName = Mastermanager._gamesettings.Nickname;
         userNamePanel.SetActive(false);
-        RoomListingPanel.SetActive(true);
+        RoomListingPanel.transform.localScale=new Vector3(1,1,1);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
-
-public class Manager : MonoBehaviourPunCallbacks,IPunObservable
+public class Manager : MonoBehaviourPunCallbacks, IPunObservable
 {
     public static Manager manager;
     //about player
@@ -12,8 +11,8 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
     private GameObject playerobject;
     public List<Transform> playerposition = new List<Transform>();
     public List<GameObject> playerlist = new List<GameObject>();
-  
-   
+
+
     private GameObject cam;
 
 
@@ -46,7 +45,7 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
     public List<GameObject> placedcardlist = new List<GameObject>();
     public int numberofcard;
     public List<Sprite> coveredsprite = new List<Sprite>();
-
+    public List<GameObject> cardchipbet = new List<GameObject>();
 
     //visual text
     public GameObject visualtext;
@@ -71,6 +70,9 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
 
     public GameObject opponentbettedtext;
     public Text bettedtext;
+    public int betadjust;
+
+    public string winname;
     private void Start()
     {
         Spawn();
@@ -78,16 +80,16 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
         Cardspawn();
         reloadbutton.GetComponent<Button>().onClick.AddListener(Onclickreloadscene);
         exitbutton.GetComponent<Button>().onClick.AddListener(Onclickexit);
-       
+
     }
 
 
-  
+
 
     //Player spawn
     void Spawn()
     {
-        playerobject = PhotonNetwork.Instantiate(playeref.name, new Vector3(0,0,0), Quaternion.identity);
+        playerobject = PhotonNetwork.Instantiate(playeref.name, new Vector3(0, 0, 0), Quaternion.identity);
     }
 
 
@@ -112,9 +114,9 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
     //card spawn
     void Cardspawn()
     {
-        
-      
-       
+
+
+
         cellsize = cardsprite[Mastermanager._gamesettings.playerenteredindex].bounds.size;
         Vector2 newcellsize = new Vector2(gridsize.x / (float)coloumns, gridsize.y / (float)row);
 
@@ -124,25 +126,25 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
         Debug.Log(cellobject.transform.position + "cpos");
 
         cellobject.transform.localScale = new Vector2(cellscale.x, cellscale.y);
-        
+
         for (int i = 0; i < row; i++)
         {
             for (int j = 0; j < coloumns; j++)
             {
 
-               
 
 
 
-                newpos = new Vector2(j * cellsize.x + gridoffset.x , i * cellsize.y + gridoffset.y);
-                
+
+                newpos = new Vector2(j * cellsize.x + gridoffset.x, i * cellsize.y + gridoffset.y);
+
                 g = PhotonNetwork.Instantiate(cellobject.name, newpos + cardspawnpos[0].transform.position, Quaternion.identity);
 
 
-               
 
-                    g.transform.localScale = new Vector2(cellscale.x, cellscale.y);
-               
+
+                g.transform.localScale = new Vector2(cellscale.x, cellscale.y);
+
 
 
 
@@ -153,7 +155,7 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
             }
 
         }
-       
+
 
 
 
@@ -171,7 +173,7 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
 
 
 
-   
+
 
 
 
@@ -181,14 +183,14 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
         if (!PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.LeaveRoom();
-          
+
             PhotonNetwork.LoadLevel(0);
         }
         else
         {
             PhotonNetwork.LoadLevel(0);
         }
-        
+
     }
     public void Onclickexit()
     {
@@ -199,14 +201,17 @@ public class Manager : MonoBehaviourPunCallbacks,IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if(stream.IsWriting)
+        if (stream.IsWriting)
         {
-         // stream.SendNext(cardcount);
-           
-        }else if(stream.IsReading)
+            // stream.SendNext(cardcount);
+            stream.SendNext(winname);
+
+        }
+        else if (stream.IsReading)
         {
-           //cardcount = (int)stream.ReceiveNext();
-          
+            //cardcount = (int)stream.ReceiveNext();
+            winname = (string)stream.ReceiveNext();
+
         }
     }
 }
