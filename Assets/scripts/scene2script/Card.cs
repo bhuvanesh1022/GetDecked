@@ -112,6 +112,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
         gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
         if (iscollided)
         {
+
             transform.position = Manager.manager.cardplaceposition[Mastermanager._gamesettings.playerenteredindex].position;
             gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 2;
             isplaced = true;
