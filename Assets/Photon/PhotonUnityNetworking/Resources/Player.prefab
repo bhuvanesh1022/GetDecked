@@ -309,7 +309,7 @@ MonoBehaviour:
   isvisualenabled: 0
   usernametext: {fileID: 5896932890211332660}
   currenttime: 0
-  maxtime: 30
+  maxtime: 20
   calculatedtime: 0
   cardisplacedbyplayer: 0
   cancalculate: 0
@@ -332,6 +332,14 @@ MonoBehaviour:
   opponentwage: 0
   iswin: 0
   winname: 
+  istimeover: 0
+  istimeendsvisual: 0
+  isturnover: 0
+  timeendwin: 0
+  isbothplayed: 0
+  isbothplayedvisual: 0
+  isdraw: 0
+  isvisualdraw: 0
 --- !u!114 &-2958888860296051739
 MonoBehaviour:
   m_ObjectHideFlags: 0
