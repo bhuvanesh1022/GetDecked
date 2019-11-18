@@ -111,10 +111,17 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
         isplaced = false;
         gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
         if (iscollided)
-        {
-
-            transform.position = Manager.manager.cardplaceposition[Mastermanager._gamesettings.playerenteredindex].position;
+        {         
+              
+       
+            
+            
             gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 2;
+            if(photonView.IsMine)
+            {
+                transform.position = Manager.manager.cardplaceposition[0].position;
+            }
+           
             isplaced = true;
             photonView.RPC("Addplacedcard", RpcTarget.AllBuffered, null);
 
@@ -174,7 +181,10 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
         }
         if (isplaced && !photonView.IsMine)
         {
-            transform.localScale = Manager.manager.cellscale;
+           transform.localScale = Manager.manager.cellscale;
+          transform.position = Manager.manager.cardplaceposition[1].transform.position;
+        
+
         }
         else if (!isplaced && !photonView.IsMine)
         {
@@ -196,7 +206,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (Manager.manager.placedcardlist.Count == 2)
         {
-            canshowvalues = true;
+            canshowvalues = true; 
 
         }
 
@@ -233,13 +243,13 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
 
             if (isplaced)
             {
-                stream.SendNext(transform.position);
+              //  stream.SendNext(transform.position);
             }
             if (canshowvalues && iscollided)
             {
 
                 stream.SendNext(cardattributetext.text);
-                stream.SendNext(transform.position);
+             // stream.SendNext(transform.position);
             }
 
 
@@ -257,14 +267,14 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
 
             if (isplaced)
             {
-                transform.position = (Vector3)stream.ReceiveNext();
+              //  transform.position = (Vector3)stream.ReceiveNext();
             }
 
             if (canshowvalues && iscollided)
             {
 
                 cardattributetext.text = (string)stream.ReceiveNext();
-                transform.position = (Vector3)stream.ReceiveNext();
+              // transform.position = (Vector3)stream.ReceiveNext();
             }
         }
     }
