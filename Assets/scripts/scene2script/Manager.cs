@@ -73,6 +73,7 @@ public class Manager : MonoBehaviourPunCallbacks, IPunObservable
     public int betadjust;
 
     public string winname;
+  
     private void Start()
     {
         Spawn();
