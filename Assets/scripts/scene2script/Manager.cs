@@ -206,6 +206,7 @@ public class Manager : MonoBehaviourPunCallbacks, IPunObservable
         {
             // stream.SendNext(cardcount);
             stream.SendNext(winname);
+            
 
         }
         else if (stream.IsReading)

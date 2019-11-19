@@ -45,6 +45,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
     public bool isbothplayedvisual;
     public bool isdraw;
     public bool isvisualdraw;
+    public bool bothzero;
+    public bool canreset;
     private void Start()
     {
 
@@ -84,10 +86,12 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
         Timer();
         Iscardplacedbyplayer();
         Health();
-      Timeover();
+        Timeover();
         Healthvisual();
         Wincondition();
+
         Tokenreset();
+        photonView.RPC("ResetToken", RpcTarget.AllBuffered, null);
         Betvalues();
 
 
@@ -196,7 +200,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
     public void Onclickwagebetbutton()
     {
        
-        if (Manager.manager.canplay && !Manager.manager.iswagebetted)
+        if (Manager.manager.canplay && !Manager.manager.iswagebetted &&!nextturn)
         {
 
             Manager.manager.betadjust = 0;
@@ -257,6 +261,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             Manager.manager.wageobject.SetActive(true);
             Manager.manager.wagebetbutton.SetActive(true);
             wagevalue =0;
+            maxwage = 10;
         }
         else
         {
@@ -407,7 +412,10 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             yield return new WaitForSeconds(2f);
             isvaluechanged = false;
             isvisualenabled = false;
-            nextturn = true;
+            for (int i = 0; i < Manager.manager.playerlist.Count; i++)
+            {
+                Manager.manager.playerlist[i].GetComponent<Playerobject>().nextturn = true;
+            }
 
         }
         if (isnothingchanged && !cancalculate)
@@ -480,7 +488,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             isvisualenabled = true;
             yield return new WaitForSeconds(2f);
             Manager.manager.canplay = true;
-            nextturn = false;
+          
             Manager.manager.iswagebetted = false;
       
             for (int j = 0; j < Manager.manager.playerlist.Count; j++)
@@ -502,7 +510,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
 
 
 
-
+            nextturn = false;
 
         }
         if (isvisualgameended)
@@ -900,32 +908,35 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                 Manager.manager.playerlist[i].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[i].GetComponent<Playerobject>().health.ToString();
 
             }
+
+
+            if (Manager.manager.playerlist[i].GetComponent<Playerobject>().nextturn)
+            {
+
+                Manager.manager.placedcardlist = new List<GameObject>();
+                Manager.manager.visualtext.GetComponent<Text>().text = "Next turn";
+                iswagebetted = false;
+
+
+                for (int c = 0; c < Manager.manager.cardlist.Count; c++)
+                {
+                    if (Manager.manager.cardlist[c].GetComponent<Card>().isplaced)
+                    {
+
+                        Manager.manager.cardlist[c].transform.position = Manager.manager.cardlist[c].GetComponent<Card>().startpos;
+                        Manager.manager.cardlist[c].GetComponent<Card>().isplaced = false;
+                        Manager.manager.cardlist[c].GetComponent<Card>().canshowvalues = false;
+
+
+                    }
+
+                }
+
+            }
         }
 
 
-        if (nextturn)
-        {
-
-            Manager.manager.placedcardlist = new List<GameObject>();
-            Manager.manager.visualtext.GetComponent<Text>().text = "Next turn";
-            iswagebetted = false;
-
-           
-            for (int c = 0; c < Manager.manager.cardlist.Count; c++)
-            {
-                if (Manager.manager.cardlist[c].GetComponent<Card>().isplaced)
-                {
-
-                    Manager.manager.cardlist[c].transform.position = Manager.manager.cardlist[c].GetComponent<Card>().startpos;
-                    Manager.manager.cardlist[c].GetComponent<Card>().isplaced = false;
-                    Manager.manager.cardlist[c].GetComponent<Card>().canshowvalues = false;
-                   
-
-                }
-              
-            }
-           
-            }
+     
 
 
         if (isvisualgameended)
@@ -1039,33 +1050,43 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
 
 
     }
-    void Tokenreset()
+    [PunRPC]
+  public  void Tokenreset()
     {
-        if (Manager.manager.placedcardlist.Count ==2 )
-        {
-           
+       
+            
             for (int i = 0; i < Manager.manager.playerlist.Count; i++)
             {
-                for (int j = i + 1; j < Manager.manager.playerlist.Count; j++)
+            for (int j = i + 1; j < Manager.manager.playerlist.Count; j++)
+            {
+                if (Manager.manager.playerlist[i].GetComponent<Playerobject>().maxwage == 0 && Manager.manager.playerlist[j].GetComponent<Playerobject>().maxwage == 0)
                 {
-                    if (Manager.manager.playerlist[i].GetComponent<Playerobject>().maxwage == 0 && Manager.manager.playerlist[j].GetComponent<Playerobject>().maxwage == 0)
-                    {
-                        
-                        Debug.Log("Is executes");
-                        Manager.manager.maxwagevalue =10;
-                        Manager.manager.playerlist[i].GetComponent<Playerobject>().maxwage = 10;
-                        Manager.manager.playerlist[j].GetComponent<Playerobject>().maxwage = 10;
-                        Manager.manager.chiptext.text = Manager.manager.maxwagevalue.ToString();
+                    Debug.Log("Is Bothzero");
+                    canreset = true;
+                    Debug.Log("Is executes");
+                   
 
-
-                        Manager.manager.playerlist[i].GetComponent<Playerobject>().opponentwage = Manager.manager.playerlist[i].GetComponent<Playerobject>().maxwage;
-                        Manager.manager.playerlist[j].GetComponent<Playerobject>().opponentwage = Manager.manager.playerlist[j].GetComponent<Playerobject>().maxwage;
-                            Debug.Log("oppo2" + opponentwage.ToString());
-                            Manager.manager.opponentchiplefttext.text = opponentwage.ToString();
-                        
-                    }
                 }
+                
             }
+            }
+        }
+    [PunRPC]
+  public  void ResetToken()
+    {
+        if(canreset&&nextturn)
+        {
+
+
+            maxwage = 10;
+            Manager.manager.maxwagevalue = 10;
+
+            opponentwage = maxwage;
+
+                Manager.manager.opponentchiplefttext.text = opponentwage.ToString();
+                Manager.manager.chiptext.text = Manager.manager.maxwagevalue.ToString();
+            canreset = false;
+            
         }
     }
 
@@ -1083,8 +1104,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                     Manager.manager.playerlist[i].GetComponent<Playerobject>().health -= Manager.manager.playerlist[i].GetComponent<Playerobject>().opponentbetted + 1;
                     //  Manager.manager.playerlist[i].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[i].GetComponent<Playerobject>().health.ToString();
                     Debug.Log(Manager.manager.playerlist[i].GetComponent<Playerobject>().health + "health");
-
-                    Manager.manager.playerlist[i].GetComponent<Playerobject>().isturnover = true;
+                   Manager.manager.playerlist[i].GetComponent<Playerobject>().isturnover = true;
 
                 }
             }
@@ -1133,6 +1153,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(winname);
             stream.SendNext(isturnover);
             stream.SendNext(istimeendsvisual);
+            stream.SendNext(nextturn);
+            stream.SendNext(canreset);
         }
         else if (stream.IsReading)
         {
@@ -1158,6 +1180,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             winname = (string)stream.ReceiveNext();
             isturnover = (bool)stream.ReceiveNext();
             istimeendsvisual = (bool)stream.ReceiveNext();
+            nextturn = (bool)stream.ReceiveNext();
+            canreset = (bool)stream.ReceiveNext();
         }
     }
 }
