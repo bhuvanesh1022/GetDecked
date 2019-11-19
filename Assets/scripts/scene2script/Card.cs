@@ -18,6 +18,8 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
     public int whichplayer;
     public GameObject opponentbettetdobject;
     public Text Opponentbettedtext;
+    public GameObject bettedobject;
+    public Text bettedtext;
     private void Start()
     {
         respawned = true;
@@ -213,17 +215,26 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
     }
     void Cardcovered()
     {
-        if (!photonView.IsMine)
+        if (Manager.manager == null)
         {
-            if (canshowvalues)
+            Manager.manager = FindObjectOfType<Manager>();
+        }
+        for (int i = 0; i < Manager.manager.playerlist.Count; i++)
+        {
+
+
+            if (!photonView.IsMine )
             {
-                this.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = Manager.manager.coveredsprite[0];
-                this.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 1;
-            }
-            else
-            {
-                this.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = Manager.manager.coveredsprite[1];
-                this.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 3;
+                if (canshowvalues &&Manager.manager.playerlist[i].GetComponent<Playerobject>().canyourbetshow)
+                {
+                    this.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = Manager.manager.coveredsprite[0];
+                    this.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 1;
+                }
+                else
+                {
+                    this.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = Manager.manager.coveredsprite[1];
+                    this.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 3;
+                }
             }
         }
     }

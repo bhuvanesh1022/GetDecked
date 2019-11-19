@@ -47,6 +47,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
     public bool isvisualdraw;
     public bool bothzero;
     public bool canreset;
+    public bool canyourbetshow;
     private void Start()
     {
 
@@ -110,10 +111,12 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             iswagevisualbet = true;
             Manager.manager.opponentbettedtext.SetActive(false);
            
+          
 
         }
         else if (Manager.manager.canplay && Manager.manager.iswagebetted && photonView.IsMine)
         {
+
             iswagevisualbet = false;
            
         }
@@ -379,7 +382,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
         }
         if (cancalculate)
         {
-
+           
 
             isvisualenabled = true;
 
@@ -390,7 +393,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             }
             cancalculate = false;
             iscalculating = true;
-
+            canyourbetshow = true;
 
         }
 
@@ -508,7 +511,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
 
             }
 
-
+            canyourbetshow = false;
 
             nextturn = false;
 
@@ -924,6 +927,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                     {
 
                         Manager.manager.cardlist[c].transform.position = Manager.manager.cardlist[c].GetComponent<Card>().startpos;
+                        Manager.manager.cardlist[c].GetComponent<Card>().bettedobject.SetActive(false);
                         Manager.manager.cardlist[c].GetComponent<Card>().isplaced = false;
                         Manager.manager.cardlist[c].GetComponent<Card>().canshowvalues = false;
 
@@ -970,6 +974,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             {
                 isgameended = true;
                 isvisualgameended = true;
+                Manager.manager.timerimage.SetActive(false);
+                Manager.manager.playerlist[i].GetComponent<Playerobject>().health = 0;
             }
         }
         for (int i = 0; i < Manager.manager.playerlist.Count; i++)
@@ -980,6 +986,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                 {
                     isdraw = true;
                     isvisualgameended = true;
+                    Manager.manager.timerimage.SetActive(false);
                 }
             }
         }
@@ -1021,7 +1028,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                 if (Manager.manager.playerlist[j].GetComponent<Playerobject>().cardisplacedbyplayer)
                 {
 
-                    Debug.Log("opponent" + Manager.manager.playerlist[j].GetComponent<Playerobject>().opponentbetted.ToString());
+
 
                     if (photonView.IsMine)
                     {
@@ -1033,6 +1040,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                                 Manager.manager.cardlist[c].GetComponent<Card>().opponentbettetdobject.SetActive(true);
                                 Manager.manager.cardlist[c].GetComponent<Card>().Opponentbettedtext.text = opponentbetted.ToString();
                             }
+
                         }
 
 
@@ -1042,14 +1050,40 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
 
             }
 
+            if (Manager.manager.playerlist[j].GetComponent<Playerobject>().photonView.IsMine)
+            {
+                if (Manager.manager.playerlist[j].GetComponent<Playerobject>().cardisplacedbyplayer&& Manager.manager.playerlist[j].GetComponent<Playerobject>().canyourbetshow)
+                {
+
+
+
+                    if (photonView.IsMine)
+                    {
+                        for (int c = 0; c < Manager.manager.cardlist.Count; c++)
+                        {
+                            Debug.Log("opponent" + Manager.manager.playerlist[j].GetComponent<Playerobject>().opponentbetted.ToString());
+                            if (Manager.manager.cardlist[c].GetComponent<Card>().photonView.IsMine&& Manager.manager.cardlist[c].GetComponent<Card>().canshowvalues && Manager.manager.cardlist[c].GetComponent<Card>().isplaced)
+                            {
+                                Manager.manager.cardlist[c].GetComponent<Card>().bettedobject.SetActive(true);
+                                Manager.manager.cardlist[c].GetComponent<Card>().bettedtext.text = wagetobet.ToString();
+                            }
+
+                        }
+
+
+
+                    }
+
+                }
+            }
+
+
+
+
 
         }
-
-
-
-
-
     }
+    
     [PunRPC]
   public  void Tokenreset()
     {
