@@ -36,5 +36,7 @@ MonoBehaviour:
   - Addcard
   - StartBool
   - Addplacedcard
+  - Tokenreset
+  - ResetToken
   DisableAutoOpenWizard: 1
   ShowSettings: 1
