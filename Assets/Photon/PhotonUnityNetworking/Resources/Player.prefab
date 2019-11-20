@@ -343,6 +343,12 @@ MonoBehaviour:
   bothzero: 0
   canreset: 0
   canyourbetshow: 0
+  IsSpecialCardActive: 0
+  IsSpecialCardApplied: 0
+  IsSameAndSpecial: 0
+  IsSpecialCalculating: 0
+  IsSpecialApplied: 0
+  IsSpecialvisual: 0
 --- !u!114 &-2958888860296051739
 MonoBehaviour:
   m_ObjectHideFlags: 0

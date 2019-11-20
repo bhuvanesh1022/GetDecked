@@ -20,6 +20,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
     public Text Opponentbettedtext;
     public GameObject bettedobject;
     public Text bettedtext;
+
     private void Start()
     {
         respawned = true;
@@ -115,9 +116,7 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
         if (iscollided)
         {         
               
-       
-            
-            
+          
             gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 2;
             if(photonView.IsMine)
             {

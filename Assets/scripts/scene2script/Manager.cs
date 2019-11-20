@@ -73,7 +73,9 @@ public class Manager : MonoBehaviourPunCallbacks, IPunObservable
     public int betadjust;
 
     public string winname;
-  
+    //speacial button
+    public GameObject specialBtn,OpenentSpecialBtn;
+
     private void Start()
     {
         Spawn();

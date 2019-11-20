@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gamesettings
   m_EditorClassIdentifier: 
   gameversion: v0.0.0
-  nickname: 21
+  nickname: fre
   loaded: 1
   playerenteredindex: 0
   attaclvalue: 0
