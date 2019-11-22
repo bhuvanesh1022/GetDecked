@@ -349,6 +349,13 @@ MonoBehaviour:
   IsSpecialCalculating: 0
   IsSpecialApplied: 0
   IsSpecialvisual: 0
+  IsdiffSpecialactive: 0
+  IsDifferentcardspecial: 0
+  Isdifferentcardspecialapplied: 0
+  Isdiffernentcardspecialcalculating: 0
+  specialnumber: 0
+  localspecial: {fileID: 0}
+  opponentspecialbutton: {fileID: 0}
 --- !u!114 &-2958888860296051739
 MonoBehaviour:
   m_ObjectHideFlags: 0

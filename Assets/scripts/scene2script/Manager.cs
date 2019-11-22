@@ -75,6 +75,8 @@ public class Manager : MonoBehaviourPunCallbacks, IPunObservable
     public string winname;
     //speacial button
     public GameObject specialBtn,OpenentSpecialBtn;
+    public List<GameObject> specials = new List<GameObject>();
+    public int maxspecialcount;
 
     private void Start()
     {
