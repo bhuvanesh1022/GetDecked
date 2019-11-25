@@ -345,7 +345,6 @@ MonoBehaviour:
   canyourbetshow: 0
   IsSpecialCardActive: 0
   IsSpecialCardApplied: 0
-  IsSameAndSpecial: 0
   IsSpecialCalculating: 0
   IsSpecialApplied: 0
   IsSpecialvisual: 0
@@ -356,6 +355,8 @@ MonoBehaviour:
   specialnumber: 0
   localspecial: {fileID: 0}
   opponentspecialbutton: {fileID: 0}
+  isspecialnotduplicate: 0
+  isclicked: 0
 --- !u!114 &-2958888860296051739
 MonoBehaviour:
   m_ObjectHideFlags: 0
