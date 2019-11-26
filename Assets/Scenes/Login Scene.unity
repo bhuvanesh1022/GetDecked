@@ -1160,7 +1160,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 176940972}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.027048597
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2737,7 +2737,7 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     source: {fileID: 0}
-    loop: 0
+    loop: 1
   - soundname: Scene2theme
     audionumber: 1
     clip: {fileID: 8300000, guid: 45c0150a47d3a5745bd2005eab40e812, type: 3}
@@ -2745,27 +2745,6 @@ MonoBehaviour:
     pitch: 1
     source: {fileID: 0}
     loop: 1
-  - soundname: Jump
-    audionumber: 2
-    clip: {fileID: 8300000, guid: f870bcb2f9cf3724c977214e3911fa1d, type: 3}
-    volume: 1
-    pitch: 1
-    source: {fileID: 0}
-    loop: 0
-  - soundname: Boost
-    audionumber: 3
-    clip: {fileID: 8300000, guid: 4ec6198388747f54d9fe183e98c339e1, type: 3}
-    volume: 1
-    pitch: 1
-    source: {fileID: 0}
-    loop: 0
-  - soundname: Shuriken
-    audionumber: 4
-    clip: {fileID: 8300000, guid: cf15ac6dd4a452441a0f651cde56b35d, type: 3}
-    volume: 1
-    pitch: 1
-    source: {fileID: 0}
-    loop: 0
 --- !u!1 &1098181716
 GameObject:
   m_ObjectHideFlags: 0
@@ -3158,7 +3137,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -607193.8, y: 1746028.2}
+  m_AnchoredPosition: {x: -669461.75, y: 1918851}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1370486022

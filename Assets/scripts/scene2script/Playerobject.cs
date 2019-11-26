@@ -60,7 +60,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
     public bool isclicked;
     private void Start()
     {
-
+        PhotonNetwork.SerializationRate =15;
+        PhotonNetwork.SendRate = 20;
         Startbuttonactive();
         Playerposition();
 
@@ -126,8 +127,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Update()
     {
-        
-        photonView.RPC("Specialactive", RpcTarget.AllBuffered, null);
+        Wagebuttoninformation();
+        Specialactive();
         Manager.manager.specials[specialnumber].GetComponent<Button>().onClick.AddListener(delegate { OnClick_Specialbtn(specialnumber); });
         photonView.RPC("Opponentpower", RpcTarget.AllBuffered, null);
         Wagevisual();
@@ -254,14 +255,13 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
 
     public void Onclickwagebetbutton()
     {
-
-        if (Manager.manager.canplay && !Manager.manager.iswagebetted && !nextturn)
+     
+        if (Manager.manager.canplay && !Manager.manager.iswagebetted )
         {
 
             Manager.manager.betadjust = 0;
             Manager.manager.wagevaluetext.text = Manager.manager.betadjust.ToString();
-            Manager.manager.iswagebetted = true;
-            iswagebetted = true;
+           
 
 
             wagetobet = wagevalue;
@@ -279,6 +279,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
 
 
         }
+        Manager.manager.iswagebetted = true;
+        iswagebetted = true;
     }
 
     //positioning player
@@ -340,7 +342,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
 
     
 
-    [PunRPC]
+   
     public void Specialactive()
     {
 
@@ -519,12 +521,15 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             canyourbetshow = true;
 
         }
-        if(IsDifferentcardspecial)
+        if(IsDifferentcardspecial &&iswin)
         {
-            // nextturn = true;
+            
             yield return new WaitForSeconds(2f);
             IsSpecialvisual = true;
+          
         }
+       
+       
             if (isvaluechangedtothisplayer)
         {
             isvisualenabled = true;
@@ -534,7 +539,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             isvaluechanged = true;
 
         }
-
+      
 
         if (isvaluechanged)
         {
@@ -659,16 +664,17 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
         }
         if (nextturn)
         {
-            iswagebetted = false;
+         
+            iswin = false;
             for (int c = 0; c < Manager.manager.cardlist.Count; c++)
             {
                 Manager.manager.cardlist[c].GetComponent<Card>().canshowvalues = false;
             }
             isvisualenabled = true;
             yield return new WaitForSeconds(2f);
-            Manager.manager.canplay = true;
+          
 
-            Manager.manager.iswagebetted = false;
+          
 
             for (int j = 0; j < Manager.manager.playerlist.Count; j++)
             {
@@ -690,13 +696,14 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
             canyourbetshow = false;
 
             nextturn = false;
+            Manager.manager.canplay = true;
 
         }
         if (isvisualgameended)
         {
             isvisualenabled = true;
             yield return new WaitForSeconds(2f);
-            // isvisualgameended = false;
+            // isvisualgameended = false; 
 
         }
 
@@ -832,7 +839,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             {
                                 Debug.Log(Manager.manager.playerlist[a].GetComponent<Playerobject>().username + "reduces");
 
-                                if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive)
+                                if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive || Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive&&!iswin)
                                 {
                                     Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= Manager.manager.playerlist[a].GetComponent<Playerobject>().opponentbetted + 1;
                                     //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
@@ -850,7 +857,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             {
 
                                 Manager.manager.winname = Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().username;
-                                if (Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive)
+                                Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin = true;
+                                if (Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive && Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin)
                                 {
                                     Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsDifferentcardspecial = true;
                                 }
@@ -860,7 +868,8 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             {
 
                                 Manager.manager.winname = Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().username;
-                                if (Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive)
+                                Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin = true;
+                                if (Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive && Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin)
                                 {
                                     Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsDifferentcardspecial = true;
                                 }
@@ -880,7 +889,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             {
                                 Debug.Log(Manager.manager.playerlist[a].GetComponent<Playerobject>().username + "reduces");
 
-                                if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive)
+                                if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive || Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive && !iswin)
                                 {
                                     Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= Manager.manager.playerlist[a].GetComponent<Playerobject>().opponentbetted + 1;
                                     //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
@@ -896,6 +905,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             if (Manager.manager.placedcardlist[j].GetComponent<Card>().photonView.IsMine)
                             {
                                 Manager.manager.winname = Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().username;
+                                Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin = true;
                                 if (Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive)
                                 {
                                     Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsDifferentcardspecial = true;
@@ -905,6 +915,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             {
 
                                 Manager.manager.winname = Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().username;
+                                Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin = true;
                                 if (Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive)
                                 {
                                     Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsDifferentcardspecial = true;
@@ -920,7 +931,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                         {
                             if (!Manager.manager.placedcardlist[j].GetComponent<Card>().photonView.IsMine && Manager.manager.playerlist[a].GetComponent<Playerobject>().photonView.IsMine)
                             {
-                                if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive)
+                                if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive || Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive && !iswin)
                                 {
                                     Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= Manager.manager.playerlist[a].GetComponent<Playerobject>().opponentbetted + 1;
                                     //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
@@ -937,6 +948,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             {
 
                                 Manager.manager.winname = Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().username;
+                                Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin = true;
                                 if (Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive)
                                 {
                                     Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsDifferentcardspecial = true;
@@ -946,6 +958,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             {
 
                                 Manager.manager.winname = Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().username;
+                                Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin = true;
                                 if (Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive)
                                 {
                                     Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsDifferentcardspecial = true;
@@ -961,7 +974,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                         {
                             if (!Manager.manager.placedcardlist[i].GetComponent<Card>().photonView.IsMine && Manager.manager.playerlist[a].GetComponent<Playerobject>().photonView.IsMine)
                             {
-                                if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive)
+                                if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive || Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive && !iswin)
                                 {
                                     Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= Manager.manager.playerlist[a].GetComponent<Playerobject>().opponentbetted + 1;
                                     //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
@@ -979,6 +992,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
 
 
                                 Manager.manager.winname = Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().username;
+                                Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin = true;
                                 if (Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive)
                                 {
                                     Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsDifferentcardspecial = true;
@@ -988,6 +1002,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             {
 
                                 Manager.manager.winname = Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().username;
+                                Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin = true;
                                 if (Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive)
                                 {
                                     Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsDifferentcardspecial = true;
@@ -1003,7 +1018,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                         {
                             if (!Manager.manager.placedcardlist[j].GetComponent<Card>().photonView.IsMine && Manager.manager.playerlist[a].GetComponent<Playerobject>().photonView.IsMine)
                             {
-                                if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive)
+                                if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive || Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive && !iswin)
                                 {
                                     Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= Manager.manager.playerlist[a].GetComponent<Playerobject>().opponentbetted + 1;
                                     //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
@@ -1016,6 +1031,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             {
 
                                 Manager.manager.winname = Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().username;
+                                Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin = true;
                                 if (Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive)
                                 {
                                     Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsDifferentcardspecial = true;
@@ -1027,6 +1043,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             {
 
                                 Manager.manager.winname = Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().username;
+                                Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin = true;
                                 if (Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive)
                                 {
                                     Manager.manager.playerlist[Manager.manager.placedcardlist[j].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsDifferentcardspecial = true;
@@ -1043,7 +1060,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                         {
                             if (!Manager.manager.placedcardlist[i].GetComponent<Card>().photonView.IsMine && Manager.manager.playerlist[a].GetComponent<Playerobject>().photonView.IsMine)
                             {
-                                if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive)
+                                if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive || Manager.manager.playerlist[a].GetComponent<Playerobject>().IsdiffSpecialactive && !iswin)
                                 {
                                     Manager.manager.playerlist[a].GetComponent<Playerobject>().health -= Manager.manager.playerlist[a].GetComponent<Playerobject>().opponentbetted + 1;
                                     //  Manager.manager.playerlist[a].GetComponent<Playerobject>().healthtext.text = Manager.manager.playerlist[a].GetComponent<Playerobject>().health.ToString();
@@ -1062,6 +1079,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             {
 
                                 Manager.manager.winname = Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().username;
+                                Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin = true;
                                 if (Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive)
                                 {
                                     Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsDifferentcardspecial = true;
@@ -1071,6 +1089,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                             {
 
                                 Manager.manager.winname = Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().username;
+                                Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().iswin = true;
                                 if (Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsdiffSpecialactive)
                                 {
                                     Manager.manager.playerlist[Manager.manager.placedcardlist[i].GetComponent<Card>().whichplayer].GetComponent<Playerobject>().IsDifferentcardspecial = true;
@@ -1083,7 +1102,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                     {
                         for (int a = 0; a < Manager.manager.playerlist.Count; a++)
                         {
-                            if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsSpecialCardActive)
+                            if (!Manager.manager.playerlist[a].GetComponent<Playerobject>().IsSpecialCardActive )
                             {
                                 Manager.manager.playerlist[a].GetComponent<Playerobject>().isnothingchanged = true;
                             }
@@ -1191,6 +1210,7 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
                 Manager.manager.placedcardlist = new List<GameObject>();
                 Manager.manager.visualtext.GetComponent<Text>().text = "Next turn";
                 iswagebetted = false;
+                Manager.manager.iswagebetted = false;
 
 
                 for (int c = 0; c < Manager.manager.cardlist.Count; c++)
@@ -1531,6 +1551,18 @@ public class Playerobject : MonoBehaviourPunCallbacks, IPunObservable
         }
             
          
+    }
+
+    public void Wagebuttoninformation()
+    {
+        if (Manager.manager.canplay && !Manager.manager.iswagebetted )
+        {
+            Manager.manager.wagebetbutton.GetComponent<Button>().interactable = true;
+        }
+        else
+        {
+            Manager.manager.wagebetbutton.GetComponent<Button>().interactable = false;
+        }
     }
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
