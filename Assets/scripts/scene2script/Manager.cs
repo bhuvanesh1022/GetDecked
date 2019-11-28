@@ -78,7 +78,9 @@ public class Manager : MonoBehaviourPunCallbacks, IPunObservable
     public List<GameObject> specials = new List<GameObject>();
     public List<GameObject> activespecial = new List<GameObject>();
     public int opponentspecialnumber;
+    public GameObject cardpanel;
     public int maxspecialcount;
+    public List<Sprite> charactersprite = new List<Sprite>();
 
     private void Start()
     {
@@ -88,6 +90,11 @@ public class Manager : MonoBehaviourPunCallbacks, IPunObservable
         reloadbutton.GetComponent<Button>().onClick.AddListener(Onclickreloadscene);
         exitbutton.GetComponent<Button>().onClick.AddListener(Onclickexit);
 
+    }
+
+    private void Update()
+    {
+      
     }
 
 
@@ -204,7 +211,7 @@ public class Manager : MonoBehaviourPunCallbacks, IPunObservable
         Application.Quit();
     }
 
-
+  
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

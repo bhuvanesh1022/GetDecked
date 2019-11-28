@@ -180,6 +180,14 @@ public class Card : MonoBehaviourPunCallbacks, IPunObservable
         {
             Manager.manager = FindObjectOfType<Manager>();
         }
+        if(Manager.manager.iswagebetted)
+        {
+            Manager.manager.cardpanel.SetActive(false);
+        }
+        else
+        {
+            Manager.manager.cardpanel.SetActive(true);
+        }
         if (isplaced && !photonView.IsMine)
         {
            transform.localScale = Manager.manager.cellscale;

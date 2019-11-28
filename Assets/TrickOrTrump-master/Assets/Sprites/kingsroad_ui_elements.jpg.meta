@@ -17,6 +17,9 @@ TextureImporter:
   - first:
       213: 5978108382533294523
     second: kingsroad_ui_elements_4
+  - first:
+      213: 4448065432248806325
+    second: kingsroad_ui_elements_5
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -196,7 +199,7 @@ TextureImporter:
         width: 376
         height: 113
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -217,7 +220,7 @@ TextureImporter:
         width: 270
         height: 94
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -225,6 +228,27 @@ TextureImporter:
       bones: []
       spriteID: 674facf52f915874488c7adc14a7c157
       internalID: 5978108382533294523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingsroad_ui_elements_5
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 693
+        width: 266
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10d54786ff32cda4eb436adf9cb7528e
+      internalID: 4448065432248806325
       vertices: []
       indices: 
       edges: []
