@@ -34,7 +34,8 @@ public class Playerlisting : MonoBehaviourPunCallbacks
         {
             startbutton.SetActive(false);
             leaveroombutton.GetComponent<Button>().interactable = false;
-           // readybuttoninfotext.text = "Click to Confirm";
+            // readybuttoninfotext.text = "Click to Confirm";
+         
         }
         else
         {
@@ -184,6 +185,7 @@ public class Playerlisting : MonoBehaviourPunCallbacks
             readycolor.GetComponent<RawImage>().color = Color.green;
             readytext.text = "READY";
             ready = Isready;
+         
         }
         else
         {
@@ -204,7 +206,8 @@ public class Playerlisting : MonoBehaviourPunCallbacks
         {
             if (Isready)
             {
-                readybutton.SetActive(true);
+               
+                readybutton.SetActive(false);
                 readybuttoninfotext.text = "Click Start to Play";
             }
             else
@@ -217,6 +220,7 @@ public class Playerlisting : MonoBehaviourPunCallbacks
         {
             if (Isready)
             {
+                readybutton.SetActive(false);
                 readybuttoninfotext.text = "Waiting For opponent to start the game";
             }
             
